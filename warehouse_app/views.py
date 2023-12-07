@@ -36,15 +36,17 @@ def register(request):
 def dashboard(request):
     if 'category_id' in request.session:
         items = Category.objects.get(id = request.session['category_id']).items.all()
+        cat_id = int(request.session['category_id'])
     else:
         items = Inventory.objects.all()
+        cat_id = None
     current_user = User.objects.get(id  =request.session['login_id'])
     categories = Category.objects.all()
     content = {
         'current_user': current_user,
         'items' : items,
         'categories':categories,
-        'cat_id': int(request.session['category_id']),
+        'cat_id': cat_id,
     }
     return render(request,'items.html',content)
 
