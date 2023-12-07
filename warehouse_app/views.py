@@ -35,6 +35,7 @@ def register(request):
     
 def dashboard(request):
     if 'category_id' in request.session:
+        pass
         items = Category.objects.get(id = request.session['category_id']).items.all()
         cat_id = int(request.session['category_id'])
     else:
@@ -54,7 +55,7 @@ def add_item_form(request):
     return render(request,'edit_item')
 
 def filter(request):
-    request.session['category_id'] = request.POST['filter']
+    request.session['category_id'] = int(request.POST['filter'])
     return redirect('/dashboard')
 
 def item_view(request, id):
