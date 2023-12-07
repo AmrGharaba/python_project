@@ -36,7 +36,6 @@ def register(request):
 def dashboard(request):
     if 'category_id' in request.session:
         items = Category.objects.get(id = request.session['category_id']).items.all()
-        print(items)
     else:
         items = Inventory.objects.all()
     current_user = User.objects.get(id  =request.session['login_id'])
@@ -45,6 +44,7 @@ def dashboard(request):
         'current_user': current_user,
         'items' : items,
         'categories':categories,
+        'cat_id': int(request.session['category_id']),
     }
     return render(request,'items.html',content)
 
@@ -54,3 +54,26 @@ def add_item_form(request):
 def filter(request):
     request.session['category_id'] = request.POST['filter']
     return redirect('/dashboard')
+
+def item_view(request, id):
+    current_user = User.objects.get(id  =request.session['login_id'])
+    item = Inventory.objects.get(id = id)
+    categories = Category.objects.exclude(items = item)
+
+    content = {
+        'current_user': current_user,
+        'item' : item,
+        'categories':categories,
+    }
+    return render(request,'view_items.html',content)
+def delete_category_item(request, category_id, item_id):
+    item = Inventory.objects.get(id = item_id)
+    category = Category.objects.get(id = category_id)
+    item.categories.remove(category)
+    return redirect(f'/item_view/{item_id}')
+
+def add_category(request,id):
+    item = Inventory.objects.get(id = id)
+    category = Category.objects.get(id = request.POST['category'])
+    item.categories.add(category)
+    return redirect(f'/item_view/{id}')
