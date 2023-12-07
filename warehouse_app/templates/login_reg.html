@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" href="{% static 'login_reg.css' %}" />
+    <link href="{% static 'https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap'%}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'%}">
     <!-- <link rel="stylesheet" href="style.css"> -->
-    
     <title>login_Registration</title>
 
 </head>
@@ -60,26 +61,12 @@
 <footer>
 	<p>
 		Created with <i class="fa fa-heart"></i> by
-		<a target="_blank" href="#">mutaz jaber</a>
+		<a target="_blank" href="https://www.facebook.com/mutazmhj/"><strong> Mutaz Jaber</strong></a>
 		- 
-		<a target="_blank" href="#">here</a>.
+		<a target="_blank" href="https://www.facebook.com/mutazmhj/">here</a>.
 	</p>
 </footer>
 
 </body>
-<script>
-
-
-const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
-const container = document.getElementById('container');
-
-signUpButton.addEventListener('click', () => {
-	container.classList.add("right-panel-active");
-});
-
-signInButton.addEventListener('click', () => {
-	container.classList.remove("right-panel-active");
-});
-</script>
+<script src="{% static 'js/login.js' %}"></script>
 </html>
