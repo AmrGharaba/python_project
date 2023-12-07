@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
 from .models import User,Inventory,Category
+from django.http import JsonResponse
+import json
 import bcrypt
 
 def index(request):
@@ -69,14 +71,49 @@ def item_view(request, id):
         'categories':categories,
     }
     return render(request,'view_items.html',content)
+
 def delete_category_item(request, category_id, item_id):
     item = Inventory.objects.get(id = item_id)
     category = Category.objects.get(id = category_id)
     item.categories.remove(category)
-    return redirect(f'/item_view/{item_id}')
+    if request.POST['which_cat_delete'] == 'edit':
+        return redirect(f'/item_view/edit_form/{item_id}')
+    elif request.POST['which_cat_delete'] == 'view':
+        return redirect(f'/item_view/{item_id}')
+
+
+
 
 def add_category(request,id):
     item = Inventory.objects.get(id = id)
     category = Category.objects.get(id = request.POST['category'])
     item.categories.add(category)
+    print(category.id)
+    if request.POST['which_form'] == 'view': 
+        return redirect(f'/item_view/{id}')
+    elif request.POST['which_form'] == 'edit':
+        return redirect(f'/item_view/edit_form/{id}')
+
+
+
+
+
+def item_edit_form(request, id):
+    current_user = User.objects.get(id  =request.session['login_id'])
+    item = Inventory.objects.get(id = id)
+    categories = Category.objects.exclude(items = item)
+    
+    content = {
+        'current_user': current_user,
+        'item':item,
+        'categories':categories,
+    }
+    return render(request,'edit_item.html',content)
+def edit_item(request,id):
+    item = Inventory.objects.get(id = id)
+    item.name = request.POST['name']
+    item.count = request.POST['quantity']
+    item.price = request.POST['price']
+    item.description = request.POST['description']
+    item.save()
     return redirect(f'/item_view/{id}')
