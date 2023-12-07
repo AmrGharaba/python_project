@@ -48,7 +48,6 @@
             <th>
             <form action="/dashboard/filter" method="post" id="filter_form" >{% csrf_token %}
             <select class="form-control" name="filter" form="filter_form" onchange="this.form.submit()">
-                <option  value="">select</option>
                 {% for category in categories %}
                 <option  value="{{category.id}}" {% if category.id == cat_id %} selected {% endif %}>{{category.name}}</option>
                 {% endfor %}
