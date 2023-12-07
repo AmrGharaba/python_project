@@ -1,0 +1,92 @@
+body {
+    font-family: cursive;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 5%;
+}
+.container{
+    width: 100%;
+    height: auto;
+    margin: 2rem 0;
+    padding: 3rem 0;
+    background-color:#f5f6fa;
+    border-radius: .8rem;
+    box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.1);
+    display: flex;
+}
+h1{
+    color: red;
+}
+.titleo{
+    text-align: center;
+    color: #2b78e4;
+}
+.erorrs{
+    background-color: rgb(205, 143, 143)(206, 109, 109);
+}
+.Register{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding-left: 30px;
+}
+label{
+    font-size: 15px;
+
+}
+.inputs{
+    margin: 10px;
+    display: flex;
+    justify-content: normal;
+    align-items: flex-start;
+}
+.inputs input{
+    width: -webkit-fill-available
+}
+
+.inputs label{
+    width: 100%;
+}
+.button{
+    width: 20%;
+    margin-left: 78%;
+    margin-top: 15px;
+}
+.gray-button{
+    background-color: #dddddd;
+}
+.wallPage {
+    width: 800px;
+    margin: 0 auto;
+}
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border-bottom: 2px solid black; */
+    margin-bottom: 20px;
+}
+.right-nav {
+    display: flex;
+    align-items: end;
+    flex-direction: column;
+}
+.right-nav p {
+    margin-right: 10px;
+}
+.gray-button a{
+    text-decoration: none;
+    color: black;
+    
+}
+.gray-button{
+    background-color: #dddddd;
+    margin: 2px;
+}
+.welcome-div{
+    height: 40vh;
+}
+.report{
+    margin: 0 10% 0 10%;
+}
