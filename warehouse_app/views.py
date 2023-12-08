@@ -37,7 +37,6 @@ def register(request):
     
 def dashboard(request):
     if 'category_id' in request.session:
-        pass
         items = Category.objects.get(id = request.session['category_id']).items.all()
         cat_id = int(request.session['category_id'])
     else:
@@ -84,6 +83,26 @@ def delete_category_item(request, category_id, item_id):
 
 
 
+def add_item_category(request):
+    print(request.POST['category_id'])
+    category = Category.objects.get(id = request.POST['category_id'])
+    item = Inventory.objects.get(id = request.POST['item_id'])
+    category.items.add(item)
+    return redirect('/dashboard/categories')
+
+def create_category(request):
+    new_category = Category.objects.create(name = request.POST['name'])
+    new_category.save()
+    return redirect('/dashboard/categories')
+
+def delete_category(request,id):
+    category = Category.objects.get(id = id)
+    category.delete()
+    return redirect('/dashboard/categories')
+
+
+
+
 def add_category(request,id):
     item = Inventory.objects.get(id = id)
     category = Category.objects.get(id = request.POST['category'])
@@ -93,10 +112,6 @@ def add_category(request,id):
         return redirect(f'/item_view/{id}')
     elif request.POST['which_form'] == 'edit':
         return redirect(f'/item_view/edit_form/{id}')
-
-
-
-
 
 def item_edit_form(request, id):
     current_user = User.objects.get(id  =request.session['login_id'])
@@ -117,3 +132,19 @@ def edit_item(request,id):
     item.description = request.POST['description']
     item.save()
     return redirect(f'/item_view/{id}')
+
+def categories(request):
+    categories = Category.objects.all()
+    dictionary = {}
+    for category in Category.objects.all() :
+        items = Inventory.objects.exclude(categories = category)
+        dictionary[category] = items
+    current_user = User.objects.get(id  =request.session['login_id'])
+    items = Inventory.objects.all()
+    content = {
+        'current_user': current_user,
+        'categories':categories,
+        'dictionary':dictionary,
+    }
+    return render(request, 'category.html',content)
+
