@@ -54,21 +54,22 @@
                     <th>Price</th>
                     <th>
                         <form action="/dashboard/filter" method="post" id="filter_form">{% csrf_token %}
-                            <select class="form-control" name="filter" form="filter_form" onchange="this.form.submit()">
-                                <option value="">select</option>
+                            <select class="form-control" name="filter" form="filter_form" id="filter_select">
+                                <option value="-1">All items</option>
                                 {% for category in categories %}
                                 <option value="{{category.id}}">
-                                    
+
+
                                     {{category.name}}</option>
                                 {% endfor %}
                             </select>
-                            
+
                         </form>
                     </th>
 
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="items_filtered">
                 {% for item in items %}
                 <tr>
                     <td>{{item.name}}</td>
@@ -91,6 +92,58 @@
 
 
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#filter_select').on("change", function () {
+                var data = { filter: $('[name="filter"]').val() }
+                console.log(data)
+                $.ajax({
+                    method: "POST",
+                    url: "/dashboard/filter",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    data: data,
+                    success: function (data) {
+                        let items_dom = '';
+                        data.items.forEach(item => {
+                            items_dom += `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.count}</td>
+                                <td>${item.price}</td>
+
+                                <td><button class="btn btn-primary"
+                                    onclick="window.location.href='/item_view/${item.id}'">View</button>
+                                </td>
+                            </tr>`
+
+                        });
+                        $("#items_filtered").html(items_dom)
+
+                        console.log("data >>> ", data)
+                    }
+                })
+            })
+        })
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
 </body>
 
 </html>

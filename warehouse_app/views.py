@@ -3,6 +3,7 @@ from django.contrib import messages
 from .models import User,Inventory,Category
 from django.http import JsonResponse
 import json
+
 import bcrypt
 
 def index(request):
@@ -35,29 +36,61 @@ def register(request):
         messages.success(request, "User created Successfully")
         return redirect('/dashboard')
     
+# def dashboard(request):
+#     if 'category_id' in request.session:
+#         if None != Category.objects.filter(id = request.session['category_id']).first():
+#             items = Category.objects.get(id = request.session['category_id']).items.all()
+#         else:
+#             items = Category.objects.first().items.all()
+
+#         cat_id = int(request.session['category_id'])
+        
+#     else:
+#         items = Inventory.objects.all()
+#         cat_id = -1
+#     current_user = User.objects.get(id  =request.session['login_id'])
+#     categories = Category.objects.all()
+#     content = {
+#         'current_user': current_user,
+#         'items' : items,
+#         'categories':categories,
+#         'cat_id': cat_id,
+#     }
+
 def dashboard(request):
-    if 'category_id' in request.session:
-        items = Category.objects.get(id = request.session['category_id']).items.all()
-        cat_id = int(request.session['category_id'])
-    else:
-        items = Inventory.objects.all()
-        cat_id = None
+
+
+    items = Inventory.objects.all()
     current_user = User.objects.get(id  =request.session['login_id'])
     categories = Category.objects.all()
     content = {
         'current_user': current_user,
         'items' : items,
         'categories':categories,
-        'cat_id': cat_id,
     }
     return render(request,'items.html',content)
 
 def add_item_form(request):
     return render(request,'edit_item')
 
+# def filter(request):
+#     request.session['category_id'] = int(request.POST['filter'])
+#     return redirect('/dashboard')
+
+
 def filter(request):
     request.session['category_id'] = int(request.POST['filter'])
-    return redirect('/dashboard')
+    if None != Category.objects.filter(id = request.session['category_id']).first():
+        items = Category.objects.get(id = request.session['category_id']).items.all().values()
+    else:
+        items = Inventory.objects.all().values()
+
+    return JsonResponse({'items': list(items)})
+
+
+
+
+
 
 def item_view(request, id):
     current_user = User.objects.get(id  =request.session['login_id'])
@@ -79,8 +112,6 @@ def delete_category_item(request, category_id, item_id):
         return redirect(f'/item_view/edit_form/{item_id}')
     elif request.POST['which_cat_delete'] == 'view':
         return redirect(f'/item_view/{item_id}')
-
-
 
 
 def add_item_category(request):
@@ -148,3 +179,5 @@ def categories(request):
     }
     return render(request, 'category.html',content)
 
+def create_shipment_form(request):
+    return render(request,'create_shipment.html')
