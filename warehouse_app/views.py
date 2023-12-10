@@ -207,7 +207,7 @@ def create_shipment_form(request):
     shipments = Shipment.objects.all()
     content = {
         'items':items,
-        'user':user,
+        'current_user':user,
         'stores':stores,
         'shipments':shipments,
     }
@@ -242,3 +242,5 @@ def add_store(request):
 def logout(request):
     request.session.flush()
     return redirect('/')
+def about_us(request):
+    return render(request,'about_us.html')
