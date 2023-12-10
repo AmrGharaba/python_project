@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light ps-5 pe-5">
-        <div class="container-fluid">
-            <a class="navbar-brand">{{current_user.first_name}} {{current_user.last_name}}</a>
+    <nav class="navbar navbar-expand-lg navbar-light  ps-5 pe-5" style="background-color: #004F80;">
+        <div class="container-fluid" >
+            <a class="navbar-brand" style="color: white;">{{current_user.first_name}} {{current_user.last_name}}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -21,19 +21,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="/dashboard">Dashboard</a>
+                        <a class="nav-link active" aria-current="page" href="/dashboard" style="color: white;">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/dashboard/categories">Categories</a>
+                        <a class="nav-link" href="/dashboard/categories" style="color: white;">Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard/stores">Stores</a>
+                        <a class="nav-link" href="/dashboard/stores" style="color: white;">Stores</a>
                     </li>
 
                 </ul>
                 <ul class="navbar-nav d-flex">
                     <li class="nav-item">
-                        <a class="nav-link" href="/log_out">Log Out</a>
+                        <a class="nav-link" href="/logout" style="color: white;">Log Out</a>
                     </li>
                 </ul>
 
@@ -55,7 +55,7 @@
                     <td>{{category.name}}
                     </td>
                     <td class="col-2 text-center">
-                        <button type="submit" form="delete_category" class="btn btn-primary"
+                        <button type="submit" form="delete_category" class="btn btn-danger"
                             >Delete</button>
 
 
@@ -80,7 +80,7 @@
 
 
                     </td>
-                    <td class="col-2 text-center"><button type="submit" form="add_item_{{category.id}}" class="btn btn-primary">Confirm</button>
+                    <td class="col-2 text-center"><button type="submit" form="add_item_{{category.id}}" class="btn btn-primary" style="background-color: #004F80;">Confirm</button>
                     </td>
 
                 </tr>
@@ -101,7 +101,7 @@
                     <input type="text" class="form-control" form="add_category" name="name">
                 </div>
                 <div class="col mt-3  text-center">
-                    <button class="btn btn-primary col-12 col-lg-3" type="submit" form="add_category">Create
+                    <button class="btn btn-primary col-12 col-lg-3" type="submit" form="add_category" style="background-color: #004F80;">Create
                         Category</button>
                 </div>
             </div>
