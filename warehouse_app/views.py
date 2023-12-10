@@ -199,10 +199,12 @@ def create_shipment_form(request):
     items = Inventory.objects.all()
     stores = Store.objects.all()
     user = User.objects.get(id = request.session['login_id'])
+    shipments = Shipment.objects.all()
     content = {
         'items':items,
         'user':user,
         'stores':stores,
+        'shipments':shipments,
     }
     return render(request,'create_shipment.html',content)
 
@@ -232,3 +234,6 @@ def add_store(request):
     new_store = Store.objects.create(name = name, location = location)
     new_store.save()
     return redirect('/dashboard/stores')
+def logout(request):
+    request.session.flush()
+    return redirect('/')
