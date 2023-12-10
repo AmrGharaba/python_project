@@ -168,12 +168,10 @@ def add_category(request,id):
 def item_edit_form(request, id):
     current_user = User.objects.get(id  =request.session['login_id'])
     item = Inventory.objects.get(id = id)
-    categories = Category.objects.exclude(items = item)
     
     content = {
         'current_user': current_user,
         'item':item,
-        'categories':categories,
     }
     return render(request,'edit_item.html',content)
 def edit_item(request,id):
