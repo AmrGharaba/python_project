@@ -23,4 +23,5 @@ urlpatterns = [
     path('add_store',views.add_store),
     path('add_item',views.add_item),
     path('store_delete/<id>',views.store_delete),
+    path('logout',views.logout),
 ]
