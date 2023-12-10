@@ -30,20 +30,20 @@ class User(models.Model):
 
 class Inventory(models.Model):
     name = models.CharField(max_length=45)
-    description = models.TextField()
+    description = models.TextField(default='No description')
     image = models.TextField()
     count = models.IntegerField(default=1000)
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-# class Store(models.Model):
-#     name = models.CharField(max_length=45)
-#     description = models.TextField()
-#     location = models.CharField(max_length=45)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     item = models.ManyToManyField(Inventory, through = 'Shipment')
+class Store(models.Model):
+    name = models.CharField(max_length=45)
+    description = models.TextField()
+    location = models.CharField(max_length=45)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    item = models.ManyToManyField(Inventory, through = 'Shipment')
 
 class Category(models.Model):
     name = models.CharField(max_length=45)
@@ -51,8 +51,9 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-# class Shipment(models.Model):
-#     item = models.ForeignKey(Inventory, on_delete=models.CASCADE)
-#     store = models.ForeignKey(Store, on_delete=models.CASCADE)
-#     user = models.ForeignKey(User,on_delete=models.CASCADE)
+class Shipment(models.Model):
+    item = models.ForeignKey(Inventory, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
 

@@ -18,4 +18,9 @@ urlpatterns = [
     path('category/creat_category',views.create_category),
     path('category/delete_category/<id>',views.delete_category),
     path('create_shipment_form',views.create_shipment_form),
+    path('create_shipment',views.create_shipment),
+    path('dashboard/stores',views.stores),
+    path('add_store',views.add_store),
+    path('add_item',views.add_item),
+    path('store_delete/<id>',views.store_delete),
 ]

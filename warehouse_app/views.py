@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
-from .models import User,Inventory,Category
+from .models import User,Inventory,Category,Store,Shipment
 from django.http import JsonResponse
 import json
 
@@ -71,7 +71,16 @@ def dashboard(request):
     return render(request,'items.html',content)
 
 def add_item_form(request):
-    return render(request,'edit_item')
+    return render(request,'add_item.html')
+
+def add_item(request):
+    name = request.POST['name']
+    count = float(request.POST['quantity'])
+    price = request.POST['price']
+    description = request.POST['description']
+    new_item = Inventory.objects.create(name = name, count = count, price = price, description = description)
+    new_item.save()
+    return redirect('/dashboard')
 
 # def filter(request):
 #     request.session['category_id'] = int(request.POST['filter'])
@@ -96,11 +105,14 @@ def item_view(request, id):
     current_user = User.objects.get(id  =request.session['login_id'])
     item = Inventory.objects.get(id = id)
     categories = Category.objects.exclude(items = item)
+    shipments = Shipment.objects.filter(item = item)
+    print(type(Shipment.objects.get(id =1).quantity))
 
     content = {
         'current_user': current_user,
         'item' : item,
         'categories':categories,
+        'shipments':shipments
     }
     return render(request,'view_items.html',content)
 
@@ -131,6 +143,10 @@ def delete_category(request,id):
     category.delete()
     return redirect('/dashboard/categories')
 
+def store_delete(request,id):
+    store = Store.objects.get(id = id)
+    store.delete()
+    return redirect('/dashboard/stores')
 
 
 
@@ -158,7 +174,7 @@ def item_edit_form(request, id):
 def edit_item(request,id):
     item = Inventory.objects.get(id = id)
     item.name = request.POST['name']
-    item.count = request.POST['quantity']
+    item.count = float(request.POST['quantity'])
     item.price = request.POST['price']
     item.description = request.POST['description']
     item.save()
@@ -180,4 +196,39 @@ def categories(request):
     return render(request, 'category.html',content)
 
 def create_shipment_form(request):
-    return render(request,'create_shipment.html')
+    items = Inventory.objects.all()
+    stores = Store.objects.all()
+    user = User.objects.get(id = request.session['login_id'])
+    content = {
+        'items':items,
+        'user':user,
+        'stores':stores,
+    }
+    return render(request,'create_shipment.html',content)
+
+def create_shipment(request):
+    user = User.objects.get(id = request.session['login_id'])
+    item = Inventory.objects.get(id = request.POST['item'])
+    store = Store.objects.get(id = request.POST['store'])
+    quantity = int(request.POST['qty'])
+    shipment = Shipment.objects.create(user = user, item = item, store = store, quantity = quantity )
+    shipment.save()
+    item.count = item.count - quantity
+    item.save()
+    return redirect('/create_shipment_form')
+
+def stores(request):
+    user = User.objects.get(id = request.session['login_id'])
+    stores = Store.objects.all()
+    content = {
+        'stores':stores,
+        'current_user':user
+    }
+    return render(request,'stores.html',content)
+
+def add_store(request):
+    name = request.POST['name']
+    location = request.POST['location']
+    new_store = Store.objects.create(name = name, location = location)
+    new_store.save()
+    return redirect('/dashboard/stores')
