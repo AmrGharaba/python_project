@@ -1,18 +1,23 @@
+{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Item View</title>
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -37,27 +42,50 @@
 
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Item Name</h5>
+                        <p class="card-text">{{item.name}}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Quantity</h5>
+                        <p class="card-text">{{item.count}}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Price</h5>
+                        <p class="card-text">{{item.price}} $</p>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Category List</h3>
+                        <form action="/item_view/add_category/{{item.id}}" method="post" id="add_category">
+                            {% csrf_token %}
+                            <input type="hidden" name="which_form" value="view">
+                            <select class="form-control" name="category" form="add_category"
+                                onchange="this.form.submit()">
+                                <option value="">select</option>
+                                {% for category in categories %}
+                                <option value="{{category.id}}">{{category.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="row">
@@ -65,15 +93,15 @@
                 <div class="card mt-4">
                     <div class="card-body">
                         <h5 class="card-title" style="height: 200px; overflow: auto;">Item Description:</h5>
-                        <p class="card-text"></p>
+                        <p class="card-text">{{item.description}}</p>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-lg-6">
-                <div class="card mt-4"  style="height: 240px; overflow: auto;" >
+                <div class="card mt-4" style="height: 240px; overflow: auto;">
                     <div class="card-body">
                         <h5 class="card-title">Category List :</h5>
-                        <table class="table" >
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Category</th>
@@ -81,85 +109,64 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Cat 1</td>
+                                {% for category in item.categories.all %}
+                            <tr>
+                                <td>{{category.name}}</td>
+                                <form action="/item_view/delete_category/{{category.id}}/{{item.id}}" method="post">
+                                    <input type="hidden" name="which_cat_delete" value="view">
+                                    {% csrf_token %}
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="submit" class="btn btn-danger"><a style="color:white; text-decoration: none;">Delete</a></button>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>Cat 2</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Cat 3</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Cat 3</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Cat 3</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </td>
-                                </tr>
+                                </form>
+                            </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <div class="container mt-4">
-        <h2>Dashbord</h2>
+        <h2>Item Shipments</h2>
         <table class="table table-bordered table-striped">
             <thead class="thead-light">
                 <tr>
-                    <th>Shipment number</th>
-                    <th>Quantity</th>
-                    <th>Total price</th>
-                    <th>Stors</th>
+                    <th scope="col">Shipment Number</th>
+                    <th scope="col">Employee name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total price</th>
+                    <th scope="col">Store</th>
                 </tr>
             </thead>
             <tbody id="items_filtered">
-                <!-- Replace this part with your actual dynamic content using your backend language (e.g., Django, Flask) -->
+                {% for shipment in shipments %}
                 <tr>
-                    <td>Item 1</td>
-                    <td>10</td>
-                    <td>$100.00</td>
-                    <td>Store A</td>
+                    <th>#{{shipment.id}}</th>
+                    <td>{{shipment.user.first_name}} {{shipment.user.last_name}}</td>
+                    <td>{{shipment.quantity}}</td>
+                    <td>{{item.price|mul:shipment.quantity}} </td>
+                    <td>{{shipment.store.name}}</td>
                 </tr>
-                <tr>
-                    <td>Item 2</td>
-                    <td>8</td>
-                    <td>$80.00</td>
-                    <td>Store B</td>
-                </tr>
-                
+                {% endfor %}
             </tbody>
         </table>
         <div class="container mt-2">
-            
+
             <div class="d-grid gap-2 d-md-flex text-center ">
+                <!-- <div class="col-6 text-center">
+                    <button type="button" class="btn btn-outline-primary col-12">Remove</button>
+                </div> -->
                 <div class="col-6 text-center">
-                <button type="button" class="btn btn-outline-primary col-12">Remove</button>
-            </div>
-            <div class="col-6 text-center">
-                <button type="button" class="btn btn-outline-primary col-12">Edit</button>
-            </div>
+                    <button type="button" class="btn btn-outline-primary col-12" onclick="window.location.href='/item_view/edit_form/{{item.id}}'">Edit</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
