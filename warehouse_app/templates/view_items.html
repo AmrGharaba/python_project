@@ -1,6 +1,7 @@
 <!DOCTYPE html>
+{% load mathfilters %}
 <html lang="en">
-
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -128,25 +129,22 @@
             <thead>
                 <tr>
                     <th scope="col">Shipment Number</th>
+                    <th scope="col">Employee name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Total price</th>
                     <th scope="col">Store</th>
                 </tr>
             </thead>
             <tbody>
+                {% for shipment in shipments %}
                 <tr>
-                    <th>#8625</th>
-                    <td>100</td>
-                    <td>200</td>
-                    <td>cola</td>
+                    <th>#{{shipment.id}}</th>
+                    <td>{{shipment.user.first_name}} {{shipment.user.last_name}}</td>
+                    <td>{{shipment.quantity}}</td>
+                    <td>{{item.price|mul:shipment.quantity}} </td>
+                    <td>{{shipment.store.name}}</td>
                 </tr>
-                <tr>
-                    <th>#8141</th>
-                    <td>500</td>
-                    <td>1500</td>
-                    <td>milk</td>
-                </tr>
-
+                {% endfor %}
             </tbody>
         </table>
 
