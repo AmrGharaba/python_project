@@ -71,7 +71,12 @@ def dashboard(request):
     return render(request,'items.html',content)
 
 def add_item_form(request):
-    return render(request,'add_item.html')
+    current_user = User.objects.get(id  =request.session['login_id'])
+    content = {
+        'current_user': current_user,
+
+    }
+    return render(request,'add_item.html',content)
 
 def add_item(request):
     name = request.POST['name']
