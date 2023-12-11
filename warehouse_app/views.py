@@ -9,6 +9,19 @@ import bcrypt
 def index(request):
     return render(request,'login_reg.html')
 
+def check_login(request):
+    if not User.objects.filter(email = request.POST['email']):
+        return JsonResponse({'email_login_msg1': "Account doesnt exist"})
+    elif User.objects.filter(email = request.POST['email']):
+        if len(request.POST['password']) < 9 :
+            return JsonResponse({'email_login_msg2': "Account exists", 'password_login_msg1':"Password is too short"})
+        else:
+            return JsonResponse({'email_login_msg2': "Account exists", 'password_login_msg2':""})
+    else:
+        return redirect('/')
+
+
+
 def login(request):
     if not User.objects.filter(email = request.POST['email']):
         messages.error(request, "Account doesnt exist")
@@ -23,11 +36,21 @@ def login(request):
             messages.error(request, "password is not correct")
             return redirect('/')
 
-def register(request):
-    errors = User.objects.basic_validator(request.POST)
+
+def check_register(request):
+    errors = User.objects.basic_validator(request.POST, {request.POST['target']})
     if len(errors) > 0 :
         for key, value in errors.items():
             messages.error(request, value)
+
+        return JsonResponse({'message':errors})
+    return JsonResponse({'message':'success'})
+
+
+
+def register(request):
+    errors = User.objects.basic_validator(request.POST, {"email", "first_name", "last_name", "password", "confrim_password"})
+    if len(errors) > 0 :
         return redirect('/')
     else:
         hash_pass = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()).decode()

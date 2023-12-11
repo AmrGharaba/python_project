@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light  ps-5 pe-5" style="background-color: #004F80;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ps-5 pe-5">
         <div class="container-fluid" >
-            <a class="navbar-brand" style="color: white;">{{current_user.first_name}} {{current_user.last_name}}</a>
+            <a class="navbar-brand" ><img width="30" height="30" src="https://img.icons8.com/ios-filled/100/user-male-circle.png" alt="user-male-circle"/>   {{current_user.first_name}} {{current_user.last_name}}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -21,19 +21,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/dashboard" style="color: white;">Dashboard</a>
+                        <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard/categories" style="color: white;">Categories</a>
+                        <a class="nav-link active" href="/dashboard/categories">Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard/stores" style="color: white;">Stores</a>
+                        <a class="nav-link" href="/dashboard/stores" >Stores</a>
                     </li>
 
                 </ul>
                 <ul class="navbar-nav d-flex">
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout" style="color: white;">Log Out</a>
+                        <a class="nav-link" href="/logout" ><img width="30" height="30" src="https://img.icons8.com/external-tal-revivo-bold-tal-revivo/96/external-online-account-logout-with-arrow-direction-mark-login-bold-tal-revivo.png" alt="external-online-account-logout-with-arrow-direction-mark-login-bold-tal-revivo"/>    Log Out</a>
                     </li>
                 </ul>
 
@@ -41,7 +41,7 @@
         </div>
     </nav>
     <div class="container mt-6">
-        <h2>Category</h2>
+        <h2 style="margin-top: 10px;">Categories</h2>
         <table class="table table-bordered table-striped table-responsive">
             <thead class="thead-light">
             </thead>

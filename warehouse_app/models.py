@@ -2,21 +2,28 @@ from django.db import models
 import re
 
 class Usermanager(models.Manager):
-    def basic_validator(self, postData):
+    def basic_validator(self, postData, keys):
         errors = {}
-        EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-        if not EMAIL_REGEX.match(postData['email']):    # test whether a field matches the pattern            
-            errors['email'] = "Invalid email address!"
-        if len(postData['password']) < 8:
-            errors['password'] = 'passwrd should be at least eight characters'
-        if postData['password'] != postData['confrim_password']:
-            errors['password'] = 'passwrod must match'
-        if User.objects.filter(email = postData['email'] ):
-            errors['email'] = "Account already exists"
-        if len(postData['last_name']) < 2:
-            errors['last_name'] = 'Last name must be at least 2 characters'
-        if len(postData['first_name']) < 2:
-            errors['last_name'] = 'first name must be at least 2 characters'
+
+        for key in keys: 
+            match key:
+                case "email":                
+                    EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+                    if not EMAIL_REGEX.match(postData['email']):   
+                        errors['email'] = "Invalid email address!"
+                    elif User.objects.filter(email = postData['email'] ):
+                        errors['email'] = "Account already exists"
+                case "password":
+                    if len(postData['password']) < 8:
+                        errors['password'] = 'passwrd should be at least eight characters'
+                    elif postData['password'] != postData['confrim_password']:
+                        errors['password'] = 'passwrod must match'
+                case "last_name":
+                    if len(postData['last_name']) < 2:
+                        errors['last_name'] = 'Last name must be at least 2 characters'
+                case "first_name": 
+                    if len(postData['first_name']) < 2:
+                        errors['first_name'] = 'first name must be at least 2 characters'
         return errors
 
 class User(models.Model):
